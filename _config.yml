@@ -29,7 +29,7 @@ version:             1.0.0
 github:
   repo:              https://github.com/lsr1991
 
-# Page lists
+# Pages list
 pages_list:
   About: '/about'
   Archive: '/archive'
