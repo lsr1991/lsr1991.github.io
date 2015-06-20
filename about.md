@@ -1,6 +1,6 @@
 ---
 layout: page
-title: About
+title: 关于我
 ---
 
 我的中文名叫林澍荣，因为`澍`字取及时雨之意，所以博客名为`Timely Rain`。1991年出生于广东。
