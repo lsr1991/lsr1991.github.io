@@ -39,7 +39,7 @@ title: 在Eclipse中使用Git
 下面就可以将Gitlab上的分支linshurong拷贝到本地目录上。
 
 执行以下命令：
-```shell
+```
 git config user.name "林澍荣" user.email "linshurong@kuanguang.local"
 ```
 
@@ -50,7 +50,7 @@ git config user.name "林澍荣" user.email "linshurong@kuanguang.local"
 这个配置是账户全局的，也就是说，执行这个命令后，git在本地账户主目录下的配置文件`~/.gitconfig`中的user.name和user.email参数会被修改。如果想要修改当前repo的git配置，可以去除选项`--global`，这样命令就修改当前repo目录下的`.git/config`文件；如果要修改系统的git配置，可以将选项`--global`替换成`--system`，这样命令就修改/etc/gitconfig文件中的参数。`git config`命令一次只会修改一个文件，不会同时修改多个文件，也就是说，修改`~/.gitconfig`文件时并不会把所有repo的`.git/config`文件也修改。这部分内容参考git的帮助文档，执行命令`man git-config`可以查看。
 
 接着执行下面命令：
-```shell
+```
 git clone git@gitlab.local:application/networkqualityanalyze.git -b linshurong
 ```
 
@@ -62,7 +62,7 @@ git clone git@gitlab.local:application/networkqualityanalyze.git -b linshurong
 这里的Eclipse版本是Kelper。
 
 有时候，一个研发中的项目可能会有多个工程（比如maven工程+scala工程），而这些工程要一起同步到Gitlab分支下，因此需要先为这些工程所属的项目创建一个目录。如上图中的`kafka-spark-streaming-qos`就是一个项目目录：
-```shell
+```
 [lsr@lsr1991 kafka-spark-streaming-qos]$ ls
 kafka-producer spark-streaming-qos
 ```
@@ -70,13 +70,14 @@ kafka-producer spark-streaming-qos
 它里面包含了两个工程`kafka-producer`（maven工程）和`spark-streaming-qos`（scala工程）。
 
 这两个工程同步方法如下（这里讲的是同步已有工程，没有工程的话可以先在Eclipse中创建一个）：
+
 1. Eclipse->Window->Show View->other->Git->Git Repositories->OK，打开Eclipse识别到的Git Repo。
 2. 如下图所示，1处是添加本地repo到这个视图中，这样Eclipse才能识别这个repo（知道它的位置）并当工程需要同步到这个repo时Eclipse可以找到。2处是复制远程repo并添加到这个视图中，这个功能与之前`将创建分支拷贝到本地`一步的功能相同，可以使用上面的方法，也可以使用这种方法。
 ![img8](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2015-06-20-Using-Git-in-Eclipse-8.png)
 3. 右击工程->Team->Share Project
 4. 选择Git->Next
 5. 如下图所示，Repository的下拉列表中是Git repositories视图中已经有的repo，选择要同步工程的repo，然后Working directory会自动填上，接着选择要存放工程的路径`Path within repository`（Eclipse会将整个工程移动到这个路径下，而不是复制），这里假设repo是`/home/lsr/test/.git`，那么Working directory就是`/home/lsr/test`，并假设要存放工程的路径是`/home/lsr/test/web-qoe`，而你要同步的工程名称是ProjectA，则在Target Location中会显示`/home/lsr/test/web-qoe/ProjectA`。**注意**，如果路径已是一个Eclipse工程的目录（这里假设web-qoe是一个Eclipse工程目录，它包含`.project`文件），那么会提示类似下面的错误：
-```shell
+```
 Can not move project ProjectA to target location /home/lsr/test/web-qoe/ProjectA, as this location overlaps with location /home/lsr/test/web-qoe, which contains a .project file
 ```
 
