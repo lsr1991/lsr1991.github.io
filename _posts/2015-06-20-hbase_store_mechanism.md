@@ -1,6 +1,7 @@
 ---
 layout: page
 title: HBase的数据存储机制
+comments: true
 ---
 
 #### 本文说明
