@@ -64,9 +64,9 @@ HBase客户端API中的一个put操作都是一个RPC操作。一个RPC操作在
 
 显式刷写即用户代码调用flushCommits()；隐式刷写即客户端不通过用户代码，自己调用flushCommits()，这在以下三种情况下会触发：
 
-* 用户调用put()并且缓冲区超出限制；
-* 用户调用setWriteBufferSize()并且缓冲区超出限制；
-* 用户调用HTable类的close()方法。
+ * 用户调用put()并且缓冲区超出限制；
+ * 用户调用setWriteBufferSize()并且缓冲区超出限制；
+ * 用户调用HTable类的close()方法。
 
 #### HTable、HTablePool类及其实例[1.p68;1.p191]
 
@@ -120,26 +120,26 @@ HTablePool类及其实例：为什么使用HTablePool类？因为HTable类不是
    
 合并的种类：
 
-* minor合并：将最后生成的几个文件重写到一个更大的文件中
-* major合并：将所有文件压缩成一个文件
+ * minor合并：将最后生成的几个文件重写到一个更大的文件中
+ * major合并：将所有文件压缩成一个文件
 
 触发合并的事件：压缩检查并符合一定条件
 
 触发压缩检查的事件：
 
-- memstore刷写磁盘后
-- shell命令或API调用compaction
-- hbase异步线程，以固定周期执行检查
+ - memstore刷写磁盘后
+ - shell命令或API调用compaction
+ - hbase异步线程，以固定周期执行检查
 
 何时发生major合并：
 
-- shell命令或API调用major_compaction
-- 压缩检查后发现从上次运行major合并到现在的时间超过时限（时限由hbase.hregion.majorcompaction控制）
-- 压缩检查后触发minor合并，并且合并包含了所有存储文件，minor合并可能被提升为major合并
+ - shell命令或API调用major_compaction
+ - 压缩检查后发现从上次运行major合并到现在的时间超过时限（时限由hbase.hregion.majorcompaction控制）
+ - 压缩检查后触发minor合并，并且合并包含了所有存储文件，minor合并可能被提升为major合并
 
 何时发生minor合并：
 
-- 压缩检查后发现符合大小的文件数量超过阈值并且不发生major合并（文件大小和数量阈值由hbase.hstore.compaction.min.size和hbase.hstore.compaction.min控制）
+ - 压缩检查后发现符合大小的文件数量超过阈值并且不发生major合并（文件大小和数量阈值由hbase.hstore.compaction.min.size和hbase.hstore.compaction.min控制）
 
 #### HFile[1.p313]
 
@@ -182,15 +182,15 @@ HFile以文件的形式存储在HDFS上，即某一个regionserver上的某一�
 
 触发条件：
 
-- 达到块大小的一定比例：块大小由hbase.regionserver.hlog.blocksize控制，一定比例由hbase.regionserver.logroll.multipler控制
-- 达到一定周期：周期由hbase.regionserver.logroll.period控制
-- 旧日志被删除的触发条件：达到一定周期，检查存储文件中最大的序列号A，若日志文件最大序列号比A小，该日志文件会被移到.oldlogs目录下 
+ - 达到块大小的一定比例：块大小由hbase.regionserver.hlog.blocksize控制，一定比例由hbase.regionserver.logroll.multipler控制
+ - 达到一定周期：周期由hbase.regionserver.logroll.period控制
+ - 旧日志被删除的触发条件：达到一定周期，检查存储文件中最大的序列号A，若日志文件最大序列号比A小，该日志文件会被移到.oldlogs目录下 
 
 #### 客户端缓存的服务器信息[1.p328]
    
-- -ROOT-表的位置
-- -ROOT-表内容
-- .META.表内容
+ - -ROOT-表的位置
+ - -ROOT-表内容
+ - .META.表内容
 
 
 ## 第三部分 参考文献
