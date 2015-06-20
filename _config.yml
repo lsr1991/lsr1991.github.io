@@ -28,3 +28,9 @@ author:
 version:             1.0.0
 github:
   repo:              https://github.com/lsr1991
+
+# Page lists
+pages_lists:
+  About: '/about'
+  Archive: '/archive'
+  Feed: '/atom.xml'
