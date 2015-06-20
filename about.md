@@ -3,9 +3,6 @@ layout: page
 title: About
 ---
 
-dfdf
-
-* [Hyde](http://hyde.getpoole.com)
-* [Lanyon](http://lanyon.getpoole.com)
-
-Learn more and contribute on [GitHub](https://github.com/poole).
+我的中文名叫林澍荣，因为`澍`字取及时雨之意，所以博客名为`Timely Rain`。1991年出生于广东。
+目前是北京邮电大学的一名研究生，研究方向是大数据技术，本科毕业于北邮通信工程专业。
+这是我的第一个博客，博客的初衷是想跟大家分享与交流技术知识。我本科是学通信的，后来觉得通信方面的知识学起来实在没兴趣，就在考研的时候选择了计算机方向。在实验室呆着的一年时间里面因项目的关系接触了不少大数据方面的技术，包括Hadoop、HBase、Spark等等，现在处于学习探索的阶段，欢迎各位来访拍砖～
