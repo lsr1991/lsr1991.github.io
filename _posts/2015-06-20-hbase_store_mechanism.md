@@ -63,15 +63,16 @@ HBase客户端API中的一个put操作都是一个RPC操作。一个RPC操作在
 #### 隐式刷写和显式刷写[1.p80]
 
 显式刷写即用户代码调用flushCommits()；隐式刷写即客户端不通过用户代码，自己调用flushCommits()，这在以下三种情况下会触发：
-- 用户调用put()并且缓冲区超出限制；
-- 用户调用setWriteBufferSize()并且缓冲区超出限制；
-- 用户调用HTable类的close()方法。
+
+* 用户调用put()并且缓冲区超出限制；
+* 用户调用setWriteBufferSize()并且缓冲区超出限制；
+* 用户调用HTable类的close()方法。
 
 #### HTable、HTablePool类及其实例[1.p68;1.p191]
 
 HTable类及其实例：HBase主要客户端接口是由HTable类提供的，它位于org.apache.hadoop.hbase.client包中。创建HTable实例需要扫描.META.表并执行一些操作，非常耗时（数秒）。因此对于同一线程的多次请求，应复用同一个HTable实例。
 
-HTablePool类及其实例：为什么使用HTablePool类？因为HTable类不是线程安全（_什么是线程安全？_）的，所以在多线程环境中复用HTable实例会出现问题，于是得为每一个线程创建一个HTable实例。
+HTablePool类及其实例：为什么使用HTablePool类？因为HTable类不是线程安全的，所以在多线程环境中复用HTable实例会出现问题，于是得为每一个线程创建一个HTable实例。
 
 #### 客户端与服务器的连接[1.p194~195]
 
@@ -118,8 +119,8 @@ HTablePool类及其实例：为什么使用HTablePool类？因为HTable类不是
 #### storefile合并（compaction）[1.p311]
    
 合并的种类：
-- minor合并：将最后生成的几个文件重写到一个更大的文件中
-- major合并：将所有文件压缩成一个文件
+* minor合并：将最后生成的几个文件重写到一个更大的文件中
+* major合并：将所有文件压缩成一个文件
 
 触发合并的事件：压缩检查并符合一定条件
 
