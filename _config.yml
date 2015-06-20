@@ -5,8 +5,8 @@ permalink:           pretty
 relative_permalinks: true
 
 # Setup
-title:               Poole
-tagline:             The Jekyll Butler
+title:               Timely Rain
+tagline:             welcome to Shon Lynn's blog ~
 url:                 http://getpoole.com
 paginate:            1
 baseurl:             ""
@@ -20,11 +20,11 @@ sass:
 
 # About/contact
 author:
-  name:              Mark Otto
-  url:               https://twitter.com/mdo
-  email:             markdotto@gmail.com
+  name:              Shon Lynn
+  url:               无
+  email:             linshurong1991@gmail.com
 
 # Custom vars
 version:             1.0.0
 github:
-  repo:              https://github.com/poole/poole
+  repo:              https://github.com/lsr1991
