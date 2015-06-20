@@ -119,22 +119,26 @@ HTablePool类及其实例：为什么使用HTablePool类？因为HTable类不是
 #### storefile合并（compaction）[1.p311]
    
 合并的种类：
+
 * minor合并：将最后生成的几个文件重写到一个更大的文件中
 * major合并：将所有文件压缩成一个文件
 
 触发合并的事件：压缩检查并符合一定条件
 
 触发压缩检查的事件：
+
 - memstore刷写磁盘后
 - shell命令或API调用compaction
 - hbase异步线程，以固定周期执行检查
 
 何时发生major合并：
+
 - shell命令或API调用major_compaction
 - 压缩检查后发现从上次运行major合并到现在的时间超过时限（时限由hbase.hregion.majorcompaction控制）
 - 压缩检查后触发minor合并，并且合并包含了所有存储文件，minor合并可能被提升为major合并
 
 何时发生minor合并：
+
 - 压缩检查后发现符合大小的文件数量超过阈值并且不发生major合并（文件大小和数量阈值由hbase.hstore.compaction.min.size和hbase.hstore.compaction.min控制）
 
 #### HFile[1.p313]
@@ -177,6 +181,7 @@ HFile以文件的形式存储在HDFS上，即某一个regionserver上的某一�
 概念：旧日志文件关闭，开始使用新日志文件
 
 触发条件：
+
 - 达到块大小的一定比例：块大小由hbase.regionserver.hlog.blocksize控制，一定比例由hbase.regionserver.logroll.multipler控制
 - 达到一定周期：周期由hbase.regionserver.logroll.period控制
 - 旧日志被删除的触发条件：达到一定周期，检查存储文件中最大的序列号A，若日志文件最大序列号比A小，该日志文件会被移到.oldlogs目录下 
