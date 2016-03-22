@@ -6,9 +6,7 @@ comments: true
 
 ---
 
-本文阐述对[Dremel: Interactive Analysis of Web-Scale Datasets](http://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/36632.pdf)论文内容的理解。
-
-有助于理解Parquet数据格式。
+本文阐述对[Dremel: Interactive Analysis of Web-Scale Datasets](http://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/36632.pdf)论文内容的理解。有助于理解Parquet数据格式。
 
 ---
 

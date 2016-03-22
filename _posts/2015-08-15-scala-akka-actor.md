@@ -6,11 +6,7 @@ comments: true
 
 ---
 
-本文旨在介绍Scala中的Actor。在Scala-2.11中中，scala.actors包已经被废弃，被替代成akka.actor。
-
-scala.actors包中的Actor在本文第1部分（Actor和并发）介绍，内容选译自[《Programming in Scala》第30章](http://www.artima.com/pins1ed/actors-and-concurrency.html)
-
-akka.actor包中的Actor在本文第2部分（scala.actors到akka.actor的迁移）介绍，内容选译自[迁移指南](http://docs.scala-lang.org/overviews/core/actors-migration-guide.html)和[akka的文档](http://doc.akka.io/docs/akka/snapshot/scala/actors.html)。
+本文旨在介绍Scala中的Actor。在Scala-2.11中中，scala.actors包已经被废弃，被替代成akka.actor。scala.actors包中的Actor在本文第1部分（Actor和并发）介绍，内容选译自[《Programming in Scala》第30章](http://www.artima.com/pins1ed/actors-and-concurrency.html)。akka.actor包中的Actor在本文第2部分（scala.actors到akka.actor的迁移）介绍，内容选译自[迁移指南](http://docs.scala-lang.org/overviews/core/actors-migration-guide.html)和[akka的文档](http://doc.akka.io/docs/akka/snapshot/scala/actors.html)。
 
 ---
 
