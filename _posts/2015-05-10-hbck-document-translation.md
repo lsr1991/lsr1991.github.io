@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: hbck官方文档(中译)
 comments: true
 ---

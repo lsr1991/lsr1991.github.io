@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Kafka分配分区的机制
 comments: true
 ---

@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: YCSB官方文档-并行运行一个工作负载(中译)
 comments: true
 ---

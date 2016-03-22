@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: HBase数据导入的负载均衡策略
 comments: true
 ---

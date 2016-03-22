@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: YCSB官方文档-核心工作负载(中译)
 comments: true
 ---

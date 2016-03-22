@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Scala中的隐式转换(Part1)
 comments: true
 ---

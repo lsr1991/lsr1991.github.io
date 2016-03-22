@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: YCSB官方文档-核心属性(中译)
 comments: true
 ---

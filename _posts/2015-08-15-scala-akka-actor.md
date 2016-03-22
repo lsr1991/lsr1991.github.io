@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Scala中的Actor和Akka中的Actor
 comments: true
 ---

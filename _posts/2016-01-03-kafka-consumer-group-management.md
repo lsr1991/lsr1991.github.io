@@ -1,6 +1,6 @@
 ---
-layout: page
-title: 查看/删除Kafka的Consume-Group信息
+layout: post
+title: 管理Kafka的Consume-Group信息
 comments: true
 ---
 

@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: 在Eclipse中使用Git
 comments: true
 ---
