@@ -78,28 +78,33 @@ HBase有自动负载均衡机制，它可能会使得正在执行写入的表的
 
 > StochasticLoadBalancer负载均衡器首先会根据每个region server上的region个数作决定要不要进行rebalance，具体方法是算出所有server的平均region个数，然后根据配置项hbase.regions.slop产生一个区间[floor(average * (1-slop)), ceil(average * (1+slop))]，配置项默认0.2，如果region 个数最多的region server不比右区间大，并且region个数最少的region server不比左区间小，则说明region个数比较平均，就不进行rebalance，直接退出，等待下次调度。否则，计算当前集群状态的cost值，这个cost值的计算会考虑到移动region的成本、region 本地化策略、region count分布、每个server上table的分布等做一个加权平均。然后一共迭代computedMaxSteps次，次数由配置项hbase.master.balancer.stochastic.maxSteps和hbase.master.balancer.stochastic.stepsPerRegion、当前集群的region个数，server个数共同决定。每次迭代，都会随机选择一种pick region的策略，一共有三种，分别为RandomRegionPicker，LoadPicker和LocalityBasedPicker。随机选定一个picker策略后，这个picker就会从集群中选出两个用于相互交换的region或者选出一个用于迁移到其他server的region，然后更新集群状态的数据结构，重新计算当前集群状态的cost值，如果发现新的cost比原来的小，则说明，这种region的交换或者迁移是有效的。每次迭代都是基于上次的成果，总共做computedMaxSteps。最后产生出一系列的plan，每个plan就是交换region或者迁移region。对于所有的表都做一次，把所有的plan都放入AssignmentManager的regionsPlans中。然后对于每个plan，都调用assignmentManager.balance(plan)，这个函数会调用unassign()方法，首先在zk上为这个region创建/hbase/region-in-transition/region_encoded_name节点，节点内容为这个原来在某个server上的region处于closing状态了，然后给这个region原来所在的server发送close region命令对region进行卸载，随后再调用public void assign(HRegionInfo region, boolean setOfflineInZK)给region的目标region server发送open region的命令，目标region server是从regionPlans中查到的。最后删除zk上的节点。其中，每次做完一个plan后都会检查是否时间到了。
 
-- 参考
-   - [1](http://www.cnblogs.com/niurougan/p/3975433.html)  Hbase负载均衡流程以及源码 - albeter - 博客园
-   - [2](http://www.cnblogs.com/foxmailed/p/3899574.html)  HBase 负载均衡 - emailed - 博客园
+参考:
+   
+- [1](http://www.cnblogs.com/niurougan/p/3975433.html)  Hbase负载均衡流程以及源码 - albeter - 博客园
+- [2](http://www.cnblogs.com/foxmailed/p/3899574.html)  HBase 负载均衡 - emailed - 博客园
 
 ### 5.6.方案1还是方案2？
 
-- 方案1
-   - 缺点
-      - 在插入/查询时都引入了计算散列值这一步骤，会增加一些程序的开销（可能影响不大）
-      - 散列函数不好实现，需要测试数据在散列后分布是否均匀。如果不均匀，将有可能造成某个regionserver负载达到上限，无法使负载均衡带来的写入速度最大化
-   - 注意的地方
-      - 使用散列来分区，这是参考redis的解决方案，但是因为redis没有HBase所使用的LVM树，它并没有行键排序和连续区域查询的功能，而是纯粹的单条随机访问，它的查询可以直接使用key来计算散列值，所以使用散列来分区是合适的。而HBase因为有了行键排序的机制，所以利用这种机制可以进行连续区域的查询，业务在进行存储模型的设计时也会利用这个特点，因此不合理地使用散列可能会将这个特点破坏掉，但这可以在设计时避免。举个例子，当key是时间时，某次查询需要查询08:00:00~08:50:00的数据，这时，08:00:00的key映射到逻辑分区1，08:00:01的key映射到逻辑分区2，08:00:02映射到逻辑分区3，对于每个key，都需要计算它的逻辑分区号，这本来可以用一个scan操作来查询，但实际上需要使用3000次get操作。因此，要避免使用那些值顺序是有意义的特征作为散列key。
-      - 散列key必须可以由rowkey得出，否则仍然需要遍历所有逻辑分区。
-   - 优点
-      - 相对于方案2，不用遍历所有逻辑分区，即使集群规模很大，使用一个查询客户端即可完成查询。
+方案1：
+   
+- 缺点
+   - 在插入/查询时都引入了计算散列值这一步骤，会增加一些程序的开销（可能影响不大）
+   - 散列函数不好实现，需要测试数据在散列后分布是否均匀。如果不均匀，将有可能造成某个regionserver负载达到上限，无法使负载均衡带来的写入速度最大化
+- 注意的地方
+   - 使用散列来分区，这是参考redis的解决方案，但是因为redis没有HBase所使用的LVM树，它并没有行键排序和连续区域查询的功能，而是纯粹的单条随机访问，它的查询可以直接使用key来计算散列值，所以使用散列来分区是合适的。而HBase因为有了行键排序的机制，所以利用这种机制可以进行连续区域的查询，业务在进行存储模型的设计时也会利用这个特点，因此不合理地使用散列可能会将这个特点破坏掉，但这可以在设计时避免。举个例子，当key是时间时，某次查询需要查询08:00:00~08:50:00的数据，这时，08:00:00的key映射到逻辑分区1，08:00:01的key映射到逻辑分区2，08:00:02映射到逻辑分区3，对于每个key，都需要计算它的逻辑分区号，这本来可以用一个scan操作来查询，但实际上需要使用3000次get操作。因此，要避免使用那些值顺序是有意义的特征作为散列key。
+   - 散列key必须可以由rowkey得出，否则仍然需要遍历所有逻辑分区。
+- 优点
+   - 相对于方案2，不用遍历所有逻辑分区，即使集群规模很大，使用一个查询客户端即可完成查询。
 
-- 方案2
-   - 缺点
-      - 查询时需要遍历所有逻辑分区。
-   - 优点
-      - 可以保证任意时间点写负载都是均匀分布到各个regionserver的
-      - 不会给程序带来额外的计算开销。
+方案2：
+
+- 缺点
+   - 查询时需要遍历所有逻辑分区。
+- 优点
+   - 可以保证任意时间点写负载都是均匀分布到各个regionserver的
+   - 不会给程序带来额外的计算开销。
+
+集群规模的影响：
 
 - 大规模集群
    - 大规模集群情况下，单个regionserver导入速率总是比较小的，即使方案1可能无法均匀分布负载，但热点regionserver也不会因此挂掉
