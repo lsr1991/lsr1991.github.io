@@ -60,7 +60,7 @@ HBaseFsck（hbck）是用于检查region一致性和表完整性问题，修复�
 
 修复region一致性的选项包括：
 
-- `-fixAssignments`（与0.90版本的-fix选项是等同的）修复未分配，不正确的分配或者被分配到多个服务器的region。
+- `-fixAssignments`（与0.90版本的`-fix`选项是等同的）修复未分配，不正确的分配或者被分配到多个服务器的region。
 - `-fixMeta`从META表中移除在HDFS上不存在的region信息，并将在HDFS上存在的region但没有在META中的region信息添加到META中。
 
 修复部署和分配的问题你可以运行下面命令：
