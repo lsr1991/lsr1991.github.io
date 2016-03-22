@@ -137,7 +137,7 @@ logfile /path/to/your/log
 
 ### 3.1.概述
 
-![img1](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2016-03-22-redis-installation-guide-1.png)
+![img1](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2015-04-06-redis-installation-guide-1.png)
 
 各个节点通过一个服务频道直接相连，彼此对等。节点间通信协议是二进制的。客户端可与多个节点通信。节点无法代理查询。节点间并不是全连接的，它们会与其他人交换自己所知道的信息，像路由表更新一样。
 
