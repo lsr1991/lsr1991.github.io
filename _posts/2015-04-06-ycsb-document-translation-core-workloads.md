@@ -1,6 +1,6 @@
 ---
 layout: page
-title: （中译）YCSB官方文档-实现核心工作负载
+title: YCSB官方文档-实现核心工作负载（中译）
 comments: true
 ---
 
