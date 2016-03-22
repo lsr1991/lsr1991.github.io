@@ -4,7 +4,6 @@ title: YCSB官方文档-实现核心工作负载(中译)
 comments: true
 ---
 
-## 说明
 
 本文是[YCSB-wiki-Core-Workloads](https://github.com/brianfrankcooper/YCSB/wiki/Core-Workloads)一文的中文翻译。
 
