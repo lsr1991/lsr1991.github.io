@@ -3,10 +3,13 @@ layout: page
 title: 在Eclipse中使用Git
 ---
 
-## 说明
+---
+
 本文介绍如何从Gitlab上将repo拷贝到本地并将Eclipse的多个项目与Gitlab上repo进行同步。
 
-## 创建新分支
+---
+
+## 1.创建新分支
 首先，Gitlab上的repo会有master分支，假设这个分支上已经有了许多文件，如：
 
 ![img1](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2015-06-20-Using-Git-in-Eclipse-1.png)
@@ -23,7 +26,7 @@ title: 在Eclipse中使用Git
 
 创建之后，自己的分支上就有了master分支上的所有内容。因为自己的分支已经跟master分支独立开，所以这些对自己没用的内容可以删除，但这是在不需要将自己的分支和master分支merge的情况下才能删的。
 
-## 将创建的分支拷贝到本地
+## 2.将创建的分支拷贝到本地
 如果没有将本地账户的ssh key上传到Gitlab上，则需要点击项目首页右上角profile->SSH Keys中添加本地账户的ssh公钥，公钥的生成方法在[这里]。
 
 图1：Profile标签
@@ -60,7 +63,7 @@ git clone git@gitlab.local:application/networkqualityanalyze.git -b linshurong
 
 ![img7](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2015-06-20-Using-Git-in-Eclipse-7.png)
 
-## Eclipse共享项目
+## 3.Eclipse共享项目
 这里的Eclipse版本是Kelper。
 
 有时候，一个研发中的项目可能会有多个工程（比如maven工程+scala工程），而这些工程要一起同步到Gitlab分支下，因此需要先为这些工程所属的项目创建一个目录。如上图中的`kafka-spark-streaming-qos`就是一个项目目录：
