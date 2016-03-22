@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: HBase的数据存储机制
 comments: true
 ---
