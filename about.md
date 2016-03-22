@@ -13,6 +13,6 @@ title: 关于我
 
 欢迎各位来访拍砖～
 
-QQ: 343587187
+QQ: 三四叁伍巴漆妖巴漆
 
 E-mail: linshurong1991@gmail.com
