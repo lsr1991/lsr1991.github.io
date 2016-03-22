@@ -16,9 +16,13 @@ comments: true
 将压缩包上传到服务器。
 
 ### 2.2.解压
-`tar xzf redis-3.0.0.tar.gz`
+
+```shell
+tar xzf redis-3.0.0.tar.gz
+```
 
 ### 2.3.安装
+
 ```shell
 cd redis-3.0.0
 # 编译
@@ -28,12 +32,14 @@ make install
 ```
 
 ### 2.4.测试
+
 ```shell
 # 该步骤可选非必须
 make test
 ```
 
 ### 2.5.启动
+
 ```shell
 redis-server
 ```
@@ -76,6 +82,7 @@ Redis可以正常工作了。
 关于Redis命令，可以参考：[中文官方网站-命令](http://www.redis.cn/commands.html)。
 
 ### 2.7.停止
+
 ```shell
 redis-cli shutdown
 ```
@@ -130,6 +137,7 @@ Redis可以通过命令进行运行时配置，无需重启。但升级程序则
 
 - **日志文件的路径**
 在配置文件中，修改以下参数
+
 ```shell
 logfile /path/to/your/log
 ```
@@ -167,6 +175,7 @@ Hash slots：keyspace被分为4096个hash slots。不同的节点会拥有这些
 
 ### 3.3.部署配置文件
 修改每个节点的配置文件中以下参数：
+
 ```shell
 # 指定节点使用的端口号，被用于接受客户端访问
 port 7000
@@ -177,6 +186,7 @@ appendonly yes
 ```
 
 ### 3.4.启动各个节点
+
 ```shell
 redis-server /path/to/your/redis.conf
 ```
