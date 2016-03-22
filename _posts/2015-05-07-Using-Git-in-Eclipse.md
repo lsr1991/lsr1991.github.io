@@ -1,6 +1,7 @@
 ---
 layout: page
 title: 在Eclipse中使用Git
+comments: true
 ---
 
 ---
