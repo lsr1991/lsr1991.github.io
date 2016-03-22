@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: 如何安装HBase
 comments: true
 ---
