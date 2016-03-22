@@ -111,6 +111,7 @@ redis-cli shutdown
     - 在redis.conf配置文件中，有`# maxmemory <bytes>`一行，<bytes>即为redis可使用的最大内存字节数。还有`# maxmemory-policy noeviction`一行，它指定了超过配置的内存上限时redis会执行什么策略，`noeviction`策略会在使用内存超过`maxmemory`的值时禁止客户端进行任何使用更多内存的操作（会抛出错误），但仍可执行读操作。当当前实例有slaves节点时，需要将`maxmemory`设置小一点，以使服务器有额外的内存作为对slaves的输出缓冲区。
 
 可以设置的策略有：
+
 ```shell
 # volatile-lru -> 依照LRU算法移除过期Set的key
 # allkeys-lru -> 依照LRU算法移除任一key
