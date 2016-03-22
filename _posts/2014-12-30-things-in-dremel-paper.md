@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: Google-Dremel论文摘要与笔记
 comments: true
 ---
