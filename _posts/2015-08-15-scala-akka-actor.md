@@ -74,6 +74,7 @@ object SeriousActor extends Actor {
 ```
 
 你可以同一时刻运行两个actor，如：
+
 ```shell
 scala> SillyActor.start(); SeriousActor.start()
 res3: scala.actors.Actor = seriousActor$@1689405
