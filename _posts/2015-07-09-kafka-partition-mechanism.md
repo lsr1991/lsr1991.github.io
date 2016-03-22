@@ -35,9 +35,9 @@ comments: true
 
 ## 3.参考
 
-1. [参考链接1](http://my.oschina.net/u/591402/blog/152837)。
+1. [参考链接1](http://my.oschina.net/u/591402/blog/152837);
 
-2. [参考链接2](https://cwiki.apache.org/confluence/display/KAFKA/FAQ#FAQ-Whyisdatanotevenlydistributedamongpartitionswhenapartitioningkeyisnotspecified?)。
+2. [参考链接2](https://cwiki.apache.org/confluence/display/KAFKA/FAQ#FAQ-Whyisdatanotevenlydistributedamongpartitionswhenapartitioningkeyisnotspecified?);
 
-3. [Kafka源码](https://github.com/apache/kafka/blob/0.8.1/core/src/main/scala/kafka/producer/async/DefaultEventHandler.scala)
+3. [Kafka源码](https://github.com/apache/kafka/blob/0.8.1/core/src/main/scala/kafka/producer/async/DefaultEventHandler.scala)。
 
