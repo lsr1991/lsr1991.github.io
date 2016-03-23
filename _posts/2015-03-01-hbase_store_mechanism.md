@@ -12,25 +12,25 @@ comments: true
 
 ## 第一部分 总结
 
-#### 1.客户端如何访问HBase
+##### 1.客户端如何访问HBase
 
 什么是HBase客户端？HBase客户端即一个HTable对象。
 
 客户端对hbase的访问都是通过zookeeper集群做中介的。客户端程序通过hbase-site.xml文件中的配置得知zookeeper的连接地址，然后通过zookeeper知道集群中各个regionserver的连接地址。客户端程序运行时会先检查java程序的classpath，如果包含hbase-site.xml的路径，则读取hbase-site.xml获取zookeeper的连接地址，否则从操作系统的CLASSPATH中读取hbase-site.xml，从而获取zookeeper的连接地址。
 
-#### 2.一次put操作的执行流程
+##### 2.一次put操作的执行流程
 
 确定执行put操作服务器的位置：由于put操作是一次RPC，它需要被传送到执行该操作的服务器（reigonserver）上，因此需要确定服务器的连接地址，准确地说是需要确定put操作中要修改的数据所在region的位置。客户端通过zookeeper可以获知所有region的位置（即所在服务器的连接地址）并将信息缓存下来，当缓存为空时，客户端获取region位置的具体过程为：客户端访问zookeeper，获取拥有-ROOT-表的服务器的地址，将信息缓存下来，然后访问该服务器获取-ROOT-表，-ROOT-表中记录着拥有.META.表的服务器的地址，客户端又将这些信息缓存下来，然后继续访问拥有.META.表的服务器，获取.META.表，.META.表中记录着所有region的信息，包括起始行键、所属regionserver的地址等关键信息，客户端又将这些信息缓存下来。从缓存的这些信息中，客户端就可以知道put操作应该交给哪一个region，发往哪一个regionserver服务器。直到某一个信息失效（访问时找不到对应内容），客户端才会重新访问对应服务器获取新的信息。从上述看来，客户端缓存的信息有三个：-ROOT-表的位置，.META.表的位置，region的位置。最差的情况是在执行put操作时缓存的三个信息全部失效，那么客户端必须先执行3次访问才能确定所有信息失效，再执行3次访问才能将所有信息更新，总共需要6次网络往返请求。
 
 put操作的发送：put操作被客户端封装在一个keyvalue对象中，由RPC送往目标regionserver，由regionserver上的对应region对象接收，接着region对象将该keyvalue对象写入日志文件HLog中（作为HLog一个K,V类型的数据单元中的value），然后region对象再将keyvalue对象送入memstore内存中，接着RPC完成，客户端程序继续运行。
 
-#### 3.HBase如何将收到的数据写入磁盘
+##### 3.HBase如何将收到的数据写入磁盘
 
 刷写：如同之前的put操作，其他修改操作（delete，increment）都被封装成一个keyvalue对象存储在memstore内存中。每一个region会为对应表的所有列族各创建一个store对象，每一个store对象会被分配一个memstore，所有的memstore有一个大小上限，由hbase.hregion.memstore.flush.size控制。当memstore大小超过上限时，memstore中的数据将被刷写到磁盘（_memstore在刷写时还能被写入吗？_），同时生成一个存储这些数据的文件，这个文件以HFile的格式存储在HDFS上。
 
 存储：HFile文件被分割成多个HDFS文件块分布在HDFS集群上。
 
-#### 4.HBase如何管理存储的数据
+##### 4.HBase如何管理存储的数据
 
 合并：由于memstore大小上限一般较小，在数据不断刷写到磁盘后会产生许多文件。为了使文件数量不至于太多（_还有其他原因？_），region会使用合并机制将小文件合并成大文件。合并的方式有两种，一种是minor compaction，一种是major compaction。前者只会合并一定数量的小文件，后者则会将所有文件合并，两者触发的条件不一样，执行频率较高的是前者。
 

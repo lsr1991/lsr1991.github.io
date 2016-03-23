@@ -10,11 +10,11 @@ comments: true
 
 ---
 
-## 1.问题描述
+### 1.问题描述
 
 由于consumer group的设置会影响到consumer读取数据的行为，因此需要知道如何确定一个group是否是新的，如果是已存在的，那么它会从那个偏移量（即哪一条数据）开始读取。如果想删除一个group，又应该怎么做。
 
-## 2.解决方法
+### 2.解决方法
 
 由于consumer group信息存储在zookeeper中，我们需要通过zookeeper的客户端来查看和设置。
 
@@ -101,7 +101,7 @@ numChildren = 0
 
 使用`./kafka-run-class.sh kafka.tools.GetOffsetShell`可以查看命令的参数说明。
 
-## 3.关于kafka-console-consumer.sh
+### 3.关于kafka-console-consumer.sh
 
 使用该脚本可以消费消息，consumer的所有参数它都可以使用，但是在设置`auto.commit.enable=false`之后看起来却并没有生效，因为就算在它消费之后立刻将它关掉，它仍然会向zookeeper报告消费到哪里。
 

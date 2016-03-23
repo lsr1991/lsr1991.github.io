@@ -10,20 +10,20 @@ comments: true
 
 ---
 
-## 1.单节点
+### 1.单节点
 
-### 1.1.下载
+#### 1.1.下载
 官网下载最新版本。目前是redis-3.0.0.tar.gz。
 
 将压缩包上传到服务器。
 
-### 1.2.解压
+#### 1.2.解压
 
 ```shell
 tar xzf redis-3.0.0.tar.gz
 ```
 
-### 1.3.安装
+#### 1.3.安装
 
 ```shell
 cd redis-3.0.0
@@ -33,14 +33,14 @@ make
 make install
 ```
 
-### 1.4.测试
+#### 1.4.测试
 
 ```shell
 # 该步骤可选非必须
 make test
 ```
 
-### 1.5.启动
+#### 1.5.启动
 
 ```shell
 redis-server
@@ -60,7 +60,7 @@ redis-server
 
 指定配置文件启动redis：`redis-server /path/to/your/redis.conf`。
 
-### 1.6.测试是否正常工作
+#### 1.6.测试是否正常工作
 Redis提供一个命令行工具来给Redis发送命令，叫redis-cli。
 
 ```shell
@@ -83,13 +83,13 @@ Redis可以正常工作了。
 
 关于Redis命令，可以参考：[中文官方网站-命令](http://www.redis.cn/commands.html)。
 
-### 1.7.停止
+#### 1.7.停止
 
 ```shell
 redis-cli shutdown
 ```
 
-### 1.8.Redis持久化
+#### 1.8.Redis持久化
 参考文档[Redis 持久化](http://www.redis.cn/topics/persistence.html)
 
 - **主要概念**
@@ -106,7 +106,7 @@ redis-cli shutdown
    - 手动配置AOF。可以在默认配置文件redis.conf中找到`appendonly no`一行，前者为变量，后者为值，以空格隔开。将值由no改为yes，即可打开AOF持久化。
    - 手动配置RDB。在redis.conf配置文件中有`save 900 1`，`save 300 10`，`save 60 10000`三行，第一行表示每900秒（即15分钟）至少有1个键被改动时自动保存一次数据集。若要关闭RDB，将这三行注释掉或者添加一行`save ""`。
 
-### 1.9.内存的配置
+#### 1.9.内存的配置
 由于随着数据增多，内存会无限增大，超过上限会造成数据丢失，因此需要对内存进行配置以给予用户提醒。
 
 - **相关设置**
@@ -131,10 +131,10 @@ redis-cli shutdown
 
 配置文件中的`# maxmemory-samples 5`一行可以设置LRU和minor TTL算法的准确性。
 
-### 1.10.对Redis的配置
+#### 1.10.对Redis的配置
 Redis可以通过命令进行运行时配置，无需重启。但升级程序则需要重启。若要保证服务停止时还能正常接受请求，则需要有额外的实例来同步主实例。
 
-### 1.11.正式安装
+#### 1.11.正式安装
 上面的安装仅为测试和开发，如果要投入生产环境，需要进行正式安装。
 
 - **日志文件的路径**
@@ -144,9 +144,9 @@ Redis可以通过命令进行运行时配置，无需重启。但升级程序则
 logfile /path/to/your/log
 ```
 
-## 2.集群
+### 2.集群
 
-### 2.1.概述
+#### 2.1.概述
 
 ![img1](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2015-04-06-redis-installation-guide-1.png)
 
@@ -172,10 +172,10 @@ Hash slots：keyspace被分为4096个hash slots。不同的节点会拥有这些
     - 被用于增加新的节点到集群，无论是已有的master节点的slave，还是要用于重分区以减少其他节点负载的空节点。
 
 
-### 2.2.部署redis节点
+#### 2.2.部署redis节点
 将一个已编译好的redis包拷贝到所有节点上。将src目录下的redis-*的可执行文件（不带.o和.c后缀）都拷贝到节点的/usr/bin/目录下。
 
-### 2.3.部署配置文件
+#### 2.3.部署配置文件
 修改每个节点的配置文件中以下参数：
 
 ```shell
@@ -187,7 +187,7 @@ cluster-node-timeout 5000
 appendonly yes
 ```
 
-### 2.4.启动各个节点
+#### 2.4.启动各个节点
 
 ```shell
 redis-server /path/to/your/redis.conf
@@ -201,7 +201,7 @@ root 22567 0.0 0.0 137420 9276 ? Ssl 22:26 0:00 redis-server *:7005 [cluster]
 
 **注意**，如果有`redis-server *:6379`一行说明是之前启动过的单机redis，一个`redis-server`命令只会启动一个进程。
 
-### 2.5.创建集群
+#### 2.5.创建集群
 创建集群通过一个ruby程序`redis-trib.rb`来完成，这个程序位于redis安装目录下src目录中。它不依赖于当前主机中是否有redis进程，因此可以在redis集群之外的主机上运行（该主机需要在网络上能连接上集群各节点）。
 
 运行命令：
@@ -358,7 +358,7 @@ $ gem install rdoc
 至此，`redis-trib.rb`可以正常运行。
 
 
-### 2.6.测试
+#### 2.6.测试
 客户端可以使用`redis-cli`，但是该客户端不适合与java程序整合，因此要用主流的`Jedis`客户端。在集群支持上，`Jedis`客户端版本`2.6.2`无法兼容redis`3.0.0-beta*`版本，因此需要安装`redis-3.0.0-stable`版本。
 
 
