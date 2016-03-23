@@ -32,11 +32,11 @@ comments: true
 
 3.2.查询
 
-### 1.嵌套数据模型
+### 1. 嵌套数据模型
 
 嵌套数据模型可以用文字和树的方式描述，但记录的实例只能用文字描述，因为树模型无法表示出多值字段的某个取值的位置。下面通过一个例子来进行说明。
 
-#### 1.1.文字描述
+#### 1.1. 文字描述
 ![记录模型example](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2014-12-30-things-in-dremel-paper-1.png)
 
 上图中的相关术语说明：
@@ -50,13 +50,13 @@ comments: true
 
 ![一条记录example_2](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2014-12-30-things-in-dremel-paper-3.png)
 
-#### 1.2.树描述
+#### 1.2. 树描述
 
 树的每一个叶子都是一个基本类型。
 
 ![嵌套数据模型的树描述](https://raw.githubusercontent.com/lsr1991/lsr1991.github.io/master/image/2014-12-30-things-in-dremel-paper-4.png)
 
-#### 1.3.路径
+#### 1.3. 路径
 
 每一个基本类型字段都拥有一个路径，作为该字段的标识符。上述模型各个基本类型字段的路径如下：
 
@@ -70,7 +70,7 @@ Name.Url
 ```
 
 
-### 2.列存储
+### 2. 列存储
 
 为了使得存储的数据量达到最小，只存储基本类型字段的值。使用列式存储可以方便对数据的压缩，因为同一列的值都有相同的类型。也就是说，上述模型的记录将按照如下格式进行存储。
 
@@ -78,7 +78,7 @@ Name.Url
 
 但是，从以上存储可以看出，对于某一个值，我们无法确定它在原记录中的位置信息。因此，论文中引进了以下两个概念来描述位置信息。
 
-#### 2.1.repetition level
+#### 2.1. repetition level
 
 **概念**
 
@@ -136,7 +136,7 @@ Name
 
 为了更明确地描述记录，需要引进其他信息。这个信息被称为definition level。
 
-#### 2.2.definition level
+#### 2.2. definition level
 
 **概念**
 
@@ -231,11 +231,11 @@ Name
 这里解释一下definition level为什么描述了null值是由哪一层嵌套结构的缺失引起的。在该字段的路径中，Name和Language都是可缺失的嵌套结构，那么，总共有2层会引起null值的嵌套结构，它等于definition level的最大值。如果definition level=1，因为Name缺失必然引起Language缺失，说明Name存在，Language缺失，即引起null值的就是Language嵌套结构。如果definition level=0，说明Name缺失，即引起null值的就是Name嵌套结构。
 
 
-### 3.读取记录
+### 3. 读取记录
 
 如何将按需将多个列恢复成记录呢？论文中采用的方法是创建一个有限状态机。
 
-#### 3.1.有限状态机
+#### 3.1. 有限状态机
 
 **概念**
 
@@ -259,7 +259,7 @@ message Document {
 
 说明：在这里，为了使叙述更清楚，将列存储中的每一行称为一个字段。从图中可以看出，状态机的初始状态是DocId，当前的读取数据的指针指向DocId列的第一个字段，从该列取出definition level，判断该字段的值是否为null（definition level不为最大值则为null），若不为null则将值读取出来，然后追加到输出的记录中，若为null则由definition level判断是第几层嵌套结构缺失，然后追加还存在的那些嵌套结构到输出记录中。对当前字段做完处理后，取出下一个字段的repetition level，由于DocId是required类型，即在当前嵌套结构中只会出现一次，所以无论repetition level的值是多少，读取数据的指针都必然会跳转到Name.Language.Country列。又由于DocId不会出现重复字段，所以repetition level的值只可能为0。那么，读取数据的指针现在指向了Name.Language.Country列的第一个字段，它与DocId列的第一个字段同属一条记录。对当前字段做完操作后，取出下一个字段的repetition level，由于Name.Language.Country路径中的Name、Language嵌套结构都是可重复的，因此当repetition level=1或2时都说明下一个字段仍属于同一条记录，因此指针指向下一字段并做取值操作。直到repetition level=0，说明下一个字段已经属于下一条记录，这时一条记录的读取已经完毕，跳出状态机。
 
-#### 3.2.查询
+#### 3.2. 查询
 
 查询过程的输入有两个，一个是读取字段Reader的集合，另一个是标量表达式的集合。Reader集合中每个Reader对应查询语句中出现的每个基本类型字段。标量表达式包括查询中出现的表达式，包括聚集函数。查询的执行过程是这样一个循环：从Reader中读取字段->where语句判断->select语句选出需要的值->组织成记录->下一条记录。
 

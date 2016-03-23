@@ -10,11 +10,11 @@ comments: true
 
 ---
 
-### 1.Actor和并发
+### 1. Actor和并发
 
 有时候在设计一个程序时，指定事物独立并行地发生是有用的。Java包括了对并发的支持，虽然这种支持是足够的，但随着程序变得更大更复杂，保证并发的正确性就变得十分困难。scala通过添加actor扩充了Java对并发的原生支持。actor提供了一个并发模型，它更易用，并且可以帮助你避免很多在使用Java原生并发模型时的困难。这一章会为你展示如何使用scala的actor库，并提供一个延伸的示例：将单线程电路模拟代码转换成多线程版本。
 
-#### 1.1.并行的问题
+#### 1.1. 并行的问题
 
 Java平台的内置线程模型以共享数据和锁为基础。每个对象与一个逻辑上的监控器相关联，这个监控器被用于控制对数据的多线程访问。为了使用这个模型，你要决定什么数据会被多个线程共享，并将访问到共享数据，或者控制对共享数据的访问的代码用synchronized作标识。Java运行时使用一个锁机制来保证一次只有一个线程进入一个被同步的代码段，代码段中的内容都被同一个锁守护，从而使你可以精心安排对共享数据的多线程访问。
 
@@ -28,7 +28,7 @@ Java 5引入了java.util.concurrent，一个并发构件库，它为并发编程
 
 scala的actor库通过提供一个可替换的、无共享的、程序员更容易进行推论的消息传递模型来处理那些基本问题。actor在设计并发软件时会是第一选择，因为它们能帮你避免死锁和竞争条件，这两者是你使用共享数据和锁模型时容易陷入的问题。
 
-#### 1.2.actor和消息传递
+#### 1.2. actor和消息传递
 
 一个actor是一个类似线程的实体，它拥有一个消息盒来接收消息。要实现一个actor，你创建scala.actors.Actor的子类并实现act方法。下面是一个例子，这个actor没有对它的消息盒做什么。它只是将一个消息打印五遍然后退出。
 
@@ -172,7 +172,7 @@ scala> intActor ! 12
 Got an Int: 12
 ```
 
-#### 1.3.将本地线程视为actor
+#### 1.3. 将本地线程视为actor
 
 actor子系统为自己管理一个或多个本地线程。只要你使用你定义的一个显式的actor，你就不需要考虑太多它们是怎么映射到线程的。
 
@@ -199,12 +199,12 @@ scala> self.receiveWithin(1000) { case x => x } // wait a sec!
 res7: Any = TIMEOUT
 ```
 
-#### 1.4.回复消息
+#### 1.4. 回复消息
 在receive方法体中，处理消息部分可以使用`reply(msg)`方法来回复消息给消息发送方。
 
-### 2.scala.actors到akka.actor的迁移
+### 2. scala.actors到akka.actor的迁移
 
-#### 2.1.初始化
+#### 2.1. 初始化
 在Akka中，actor只能通过接口ActorRef来访问。ActorRef的实例可以从两个地方获取：一个是ActorDSL单例对象的actor方法；另一个是一个ActorRefFactory实例的actorOf方法。
 
 下面是构造器调用初始化的转换。
@@ -262,7 +262,7 @@ val props7 = Props(new MyActor)
 
 方法的第二个参数是可选的，但是你应该倾向于给你的actor命名，因为这是在写日志消息时会使用到的，可以标识actor。名字必须不能为空或者以`$`开头，但是它可以包括URL编码字符（例如一个空格的编码字符为%20）。actor之间是有一种继承关系的，在一个actor对象中创建的另一个actor称为这个actor的子actor。同一个actor的不同子actor不能使用同一个名称标识，否则会抛出异常`InvalidActorNameException`。Actor在被创建时就会自动启动。
 
-#### 2.2.Actor的转化
+#### 2.2. Actor的转化
 
 scala中的Actor类与AMK(Actor Migration Kit，里面包含了scala的Actor的一个扩展)中的ActWithStash类几乎相同，后者多提供了一些方法对应akka的Actor中的方法。因此，代码需要修改如下：
 
@@ -292,7 +292,7 @@ class MyActor extends ActWithStash {
 远程actor无法使用ActWithStash out of the box。方法`register('name, this)`要替换为`registerActorRef('name, self)`。
 
 
-#### 2.3.移除act()方法
+#### 2.3. 移除act()方法
 
 这里讲述如何从ActWithStash中移除act方法，以及如何修改ActWithStash中的方法以使其像Akka里一样。建议一次只修改一个actor。在scala中，一个actor的行为通过实现act方法来定义。逻辑上，一个actor是一个并发进程，它执行了act方法的方法体，然后结束。在Akka中，actor的行为通过使用一个全局消息处理器来定义，它一条接一条地处理actor的消息盒中的消息。消息处理器是一个partial函数，由receive方法返回，并应用于每一条消息。
 
@@ -352,7 +352,7 @@ receiver -> self
 reply(msg) -> sender ! msg
 ```
 
-#### 2.4.迁移到Akka
+#### 2.4. 迁移到Akka
 
 现在用户可以操作Akka的actor了。需要把库改为Akka的库。将scala-actors.jar和scala-actors-migration.jar移除，并加入akka-actor.jar和typesafe-config.jar。然后修改import代码：
 

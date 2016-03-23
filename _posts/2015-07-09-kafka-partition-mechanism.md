@@ -11,7 +11,7 @@ comments: true
 ---
 
 
-### 1.Consumer分区分配机制
+### 1. Consumer分区分配机制
 
 分配partition的策略：
 
@@ -22,7 +22,7 @@ comments: true
 
 接收消息的顺序只能保证一个partition之内是有序的，一个consumer接收多个partition的话是无法保证消息全局有序的，即consumer接收的消息的顺序可能跟producer发送的顺序不同。
 
-### 2.Producer分区机制
+### 2. Producer分区机制
 
 当指定partition key的时候，分配partition的策略：
 
@@ -33,7 +33,7 @@ comments: true
 
 - 随机：把每个消息随机分发到一个partition中。在10分钟内，该partition不会切换。所以，当producer数目小于partition时，在一定时间内会有部分partition没有收到数据。
 
-### 3.参考
+### 3. 参考
 
 1. [参考链接1](http://my.oschina.net/u/591402/blog/152837);
 

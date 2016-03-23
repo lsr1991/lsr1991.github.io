@@ -10,9 +10,9 @@ comments: true
 
 ---
 
-### 1.准备环境与资源
+### 1. 准备环境与资源
 
-#### 1.1.安装jdk
+#### 1.1. 安装jdk
 安装jdk(java development kit)-1.6版本。通过命令`java -version`查看有无安装jdk，若显示有版本号如下：
 
 ```shell
@@ -51,7 +51,7 @@ rpm -ivh jdk-6u45-linux-i586.rpm
 
 使用完root账户后，记得退出：执行命令`exit`。
 
-#### 1.2.下载hadoop
+#### 1.2. 下载hadoop
 到[Hadoop官网](http://mirrors.hust.edu.cn/apache/hadoop/common/hadoop-1.2.1/)下载Hadoop-1.2.1版本，其中有多种格式，下载`hadoop-1.2.1-bin.tar.gz`格式。
 
 下载之后，为了方便管理，自己创建一个目录用来放Hadoop和HBase的安装文件，执行命令：
@@ -68,7 +68,7 @@ tar xzf hadoop-1.2.1-bin.tar.gz
 
 解压后可以看到`hadoop-1.2.1`目录，该目录即为Hadoop安装目录。
 
-#### 1.3.下载hbase
+#### 1.3. 下载hbase
 到[HBase官网](http://mirrors.cnnic.cn/apache/hbase/)下载`hbase-0.94.27.tar.gz`。放到Hadoop安装文件所在的目录下。
 
 执行加压命令：
@@ -79,7 +79,7 @@ tar xzf hbase-0.94.27.tar.gz
 
 解压后可以看到`hbase-0.94.27`目录。
 
-#### 1.4.配置环境变量
+#### 1.4. 配置环境变量
 首先确认一下Hadoop和HBase的安装目录位于哪个目录下，这里假设是/home/lsr/software。
 
 为了能快捷地使用Hadoop和HBase的命令，使用root账户在/etc/profile文件中最下方添加以下语句：
@@ -94,7 +94,7 @@ export PATH=/home/lsr/software/hadoop-1.2.1/bin:/home/lsr/software/hbase-0.94.27
 
 然后验证修改是否生效：在终端中输入`had`，按tab键，看`hadoop`命令是否能补齐，是则说明hadoop环境变量修改成功；然后在终端中输入`hb`，按tab键，看`hbase`命令是否能补齐，是则说明HBase环境变量修改成功。
 
-#### 1.5.配置ssh免密码登录功能
+#### 1.5. 配置ssh免密码登录功能
 
 由于在Hadoop中namenode需要用ssh远程登录datanode，因此需要安装ssh服务并配置免密码登录功能，以免namenode远程登录datanode时还需要手动输入密码。因为centos在安装时已经默认安装ssh了，所以这里跳过安装ssh的步骤。
 
@@ -115,9 +115,9 @@ ssh localhost
 
 若没有提示输入密码，则配置成功。
 
-### 2.配置HDFS
+### 2. 配置HDFS
 
-#### 2.1.说明
+#### 2.1. 说明
 HDFS是hadoop的一部分，是一个分布式文件系统，HBase也是以它作为底层的文件系统。在启动HBase之前需要确保HDFS正常运行。
 
 在这里，需要简单介绍一下Hadoop。Hadoop包括三个部分：
@@ -133,7 +133,7 @@ HDFS是hadoop的一部分，是一个分布式文件系统，HBase也是以它�
 
 现在只有一台主机，整个Hadoop集群的所有守护进程都会运行在这台主机上，为了模拟真正的集群，则要将这台主机看成多台主机，方法是为这个主机添加多个域名。因为这台主机同时扮演了主节点、从节点和备份节点，所以它要有三个域名来代表这三个角色身份，即namenode、datanode1和secondarynamenode。
 
-#### 2.2.配置域名
+#### 2.2. 配置域名
 要配置/etc/hosts文件使得这两个域名能被解析，查看/etc/hosts文件，一般形式如下：
 
 ```shell
@@ -150,7 +150,7 @@ HDFS是hadoop的一部分，是一个分布式文件系统，HBase也是以它�
 
 注意，务必按上述形式修改文件，不可将datanode1添加到行尾。因为这会决定之后zookeeper是否能成功启动。其中，lsr1991为你当前的主机名。
 
-#### 2.3.配置Hadoop
+#### 2.3. 配置Hadoop
 因为后面可能会需要编写MapReduce程序，所以把Hadoop各个部分都配置好。
 
 进入Hadoop解压目录`hadoop-1.2.1`，里面有`conf`目录，该目录下的文件即为Hadoop的配置文件。
@@ -233,7 +233,7 @@ datanode1
 
 所有配置文件修改结束。
 
-#### 2.4.测试Hadoop是否正常启动
+#### 2.4. 测试Hadoop是否正常启动
 切换到root账户，执行命令`hadoop namenode -format`创建一个HDFS并格式化，成功的话显示的信息最下方形如：
 
 ```shell
@@ -265,7 +265,7 @@ hadoop-lsr-namenode-lsr1991.log
 
 如果上述测试均通过，说明Hadoop已经正常启动。
 
-#### 2.5.测试Hadoop是否正常运行
+#### 2.5. 测试Hadoop是否正常运行
 虽然Hadoop已经启动，但无法确定客户端是否可执行相应的操作，如上传文件到HDFS，提交MapReduce作业等等。
 
 首先需要说明一点，本台主机模拟了一个Hadoop集群，同时它也模拟了一个客户端。可以认为，root账户就是集群的管理员（因为他启动了集群），他拥有操作和配置集群的权限，而非root账户则是集群的用户，他们只可以使用集群来存储文件和运行自己的MapReduce作业，他们能够访问的HDFS上的目录只有他们自己的目录，别人的目录他们都不能访问。而一个新的用户想要使用集群时需要先去找集群管理员获取访问权限，比如用户lsr想要使用集群，他去找集群管理员root，那么root就会在HDFS上为他创建一个专属目录，创建的过程如下：
@@ -367,9 +367,9 @@ world     1
 
 至此，可以认为Hadoop能正常运行。
 
-### 3.配置HBase
+### 3. 配置HBase
 
-#### 3.1.修改配置文件
+#### 3.1. 修改配置文件
 
 到HBase的安装目录下，可以看到`conf`目录，进入该目录，修改以下配置文件：
 
@@ -421,7 +421,7 @@ world     1
 
 所有配置文件修改结束。
 
-#### 3.2.测试HBase是否能正常启动
+#### 3.2. 测试HBase是否能正常启动
 切换到root账户后，执行命令：
 
 `start-hbase.sh`
@@ -449,7 +449,7 @@ HBase也有web页面，namenode:60010可以查看master节点的情况。datanod
 
 若不能正常启动，需要查看日志文件，HBase的日志文件位于它的安装目录下的logs目录中。
 
-#### 3.3.测试HBase是否能正常运行
+#### 3.3. 测试HBase是否能正常运行
 使用lsr账户，执行命令`hbase shell`打开shell客户端。
 
 在客户端中执行以下命令：
@@ -504,24 +504,24 @@ HBase也有web页面，namenode:60010可以查看master节点的情况。datanod
 
 至此，HBase安装部署完毕。
 
-#### 3.4.停止HBase
+#### 3.4. 停止HBase
 切换到root账户，执行命令`stop-hbase.sh`。
 
 若需要停止Hadoop，继续执行命令`stop-all.sh`。
 
-### 4.其他
+### 4. 其他
 
-#### 4.1.只启动HDFS
+#### 4.1. 只启动HDFS
 因为对HBase来说，HDFS是必须的，MapReduce不是必须的，因此启动Hadoop时可以只启动HDFS，这样集群里的守护进程就只有NameNode和DataNode，没有JobTracker和TaskTracker。
 
 启动HDFS命令为`start-dfs.sh`。
 
 需要注意的是，必须先启动HDFS后才能启动HBase。
 
-#### 4.2.参考链接
+#### 4.2. 参考链接
 http://abloz.com/hbase/book.html#distributed
 
-#### 4.3.安装过程中出现的问题
+#### 4.3. 安装过程中出现的问题
 
 - **Q1**
 
