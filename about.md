@@ -17,7 +17,7 @@ QQ: 三四叁伍巴漆妖巴漆
 
 E-mail: linshurong1991@gmail.com
 
-Github: https://github.com/lsr1991
+Github: [lsr1991](https://github.com/lsr1991)
 
 <br>
 <br>
