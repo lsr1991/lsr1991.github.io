@@ -1,12 +1,12 @@
 ---
 layout: post
-title: 管理Kafka的Consume-Group信息
+title: 管理Kafka的Consumer-Group信息
 comments: true
 ---
 
 ---
 
-本文阐述如何查看/删除Kafka的Consume-Group信息。
+本文阐述如何查看/删除Kafka的Consumer-Group信息。
 
 ---
 
