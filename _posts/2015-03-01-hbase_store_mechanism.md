@@ -23,10 +23,12 @@ comments: true
 确定执行put操作服务器的位置：由于put操作是一次RPC，它需要被传送到执行该操作的服务器（reigonserver）上，因此需要确定服务器的连接地址，准确地说是需要确定put操作中要修改的数据所在region的位置。客户端通过zookeeper可以获知所有region的位置（即所在服务器的连接地址）并将信息缓存下来，当缓存为空时，客户端获取region位置的具体过程为：客户端访问zookeeper，获取拥有-ROOT-表的服务器的地址，将信息缓存下来，然后访问该服务器获取-ROOT-表，-ROOT-表中记录着拥有.META.表的服务器的地址，客户端又将这些信息缓存下来，然后继续访问拥有.META.表的服务器，获取.META.表，.META.表中记录着所有region的信息，包括起始行键、所属regionserver的地址等关键信息，客户端又将这些信息缓存下来。从缓存的这些信息中，客户端就可以知道put操作应该交给哪一个region，发往哪一个regionserver服务器。直到某一个信息失效（访问时找不到对应内容），客户端才会重新访问对应服务器获取新的信息。从上述看来，客户端缓存的信息有三个：-ROOT-表的位置，.META.表的位置，region的位置。最差的情况是在执行put操作时缓存的三个信息全部失效，那么客户端必须先执行3次访问才能确定所有信息失效，再执行3次访问才能将所有信息更新，总共需要6次网络往返请求。
 
 > 注：在HBase 0.96及以后，-ROOT-表被移除，.META.表的服务器地址直接存储在zookeeper中。
-
-> 参考：[Cloudera博客](http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/)
-
->       [HBase-3171](https://issues.apache.org/jira/browse/HBASE-3171)
+>
+> 参考：
+>
+> [Cloudera博客](http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/)
+>
+> [HBase-3171](https://issues.apache.org/jira/browse/HBASE-3171)
 
 put操作的发送：put操作被客户端封装在一个keyvalue对象中，由RPC送往目标regionserver，由regionserver上的对应region对象接收，接着region对象将该keyvalue对象写入日志文件HLog中（作为HLog一个K,V类型的数据单元中的value），然后region对象再将keyvalue对象送入memstore内存中，接着RPC完成，客户端程序继续运行。
 
