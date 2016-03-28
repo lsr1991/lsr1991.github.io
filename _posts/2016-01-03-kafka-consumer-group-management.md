@@ -99,7 +99,8 @@ numChildren = 0
 使用以下命令：
 
 ```shell
-./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list datanode71:9092 --topic topicLSR --partitions 0 --time -1
+./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list datanode71:9092 --topic \
+topicLSR --partitions 0 --time -1
 ```
 
 可以查看topicLSR的partition 0的最大偏移量。
