@@ -30,14 +30,19 @@ zookeeper-client -server datanode11:2181
 
 ```shell
 [zk: datanode11:2181(CONNECTED) 0] ls /
-[consumers, hive_zookeeper_namespace_hive, solr, storm, 192.168.80.5, controller_epoch, isr_change_notification, hbase, zookeeper, admin, config, controller, brokers]
+[consumers, hive_zookeeper_namespace_hive, solr, \
+storm, 192.168.80.5, controller_epoch, isr_change_notification, \
+hbase, zookeeper, admin, config, controller, brokers]
 ```
 
 可以看到有consumers一项。查看它的内容：
 
 ```shell
 [zk: datanode11:2181(CONNECTED) 1] ls /consumers
-[consumer-linshangzhen, console-consumer-26561, topicZXX-consumer-group1, topicZXX1-consumer-group1, topicZXX-consumer-group22, cqlClient, topicZXX-consumer-group, lvqiujian-test, consumerWM1, consumerWM3, consumerWM2, wm101, wm103, wm100, lxy, consumerLZ, zxy-group-id]
+[consumer-linshangzhen, console-consumer-26561, topicZXX-consumer-group1, \
+topicZXX1-consumer-group1, topicZXX-consumer-group22, cqlClient, \
+topicZXX-consumer-group, lvqiujian-test, consumerWM1, consumerWM3, \
+consumerWM2, wm101, wm103, wm100, lxy, consumerLZ, zxy-group-id]
 ```
 
 随便选择一个consumer group查看：
