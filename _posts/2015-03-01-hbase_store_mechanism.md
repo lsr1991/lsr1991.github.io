@@ -26,9 +26,9 @@ comments: true
 >
 > 参考：
 >
-> [Cloudera博客](http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/)
+> 1.[Cloudera博客](http://blog.cloudera.com/blog/2013/10/what-are-hbase-znodes/)
 >
-> [HBase-3171](https://issues.apache.org/jira/browse/HBASE-3171)
+> 2.[HBase-3171](https://issues.apache.org/jira/browse/HBASE-3171)
 
 put操作的发送：put操作被客户端封装在一个keyvalue对象中，由RPC送往目标regionserver，由regionserver上的对应region对象接收，接着region对象将该keyvalue对象写入日志文件HLog中（作为HLog一个K,V类型的数据单元中的value），然后region对象再将keyvalue对象送入memstore内存中，接着RPC完成，客户端程序继续运行。
 
